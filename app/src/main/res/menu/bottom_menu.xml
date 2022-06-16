@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/algorithm"
+        android:title="@string/feeds"
+        android:icon="@drawable/ic_baseline_rss_feed_24"/>
+    <item
+        android:id="@+id/course"
+        android:title="@string/capture"
+        android:icon="@drawable/ic_baseline_photo_camera_24"/>
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_baseline_person_24"/>
+</menu>
