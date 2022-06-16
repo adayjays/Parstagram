@@ -1,6 +1,6 @@
 # Project 3 - Parstagram
 
-Parstagram is a photo sharing app using Parse as its backend.
+**Parstagram** is a photo sharing app using Parse as its backend.
 
 Time spent: 78 hours spent in total
 
@@ -61,6 +61,8 @@ GIF created with [Ezgif](https://ezgif.com/video-to-gif).
 List an 3rd party libraries, icons, graphics, or other assets you used in your app.
 
 - [Android Async Http Client](http://loopj.com/android-async-http/) - networking library
+- [Picasso](https://square.github.io/picasso/) - A powerful image downloading and caching library for Android
+- [Parceler](https://github.com/johncarl81/parceler)
 
 
 ## Notes
