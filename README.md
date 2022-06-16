@@ -49,7 +49,10 @@ Please list two areas of the assignment you'd like to **discuss further with you
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
+
+
 ![ScreenShot](/screenshots/walkthrough.gif)
+
 
 GIF created with [Ezgif](https://ezgif.com/video-to-gif).
 
