@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
-
+// The parse application main entry class and registry initializer
 public class ParseApplication extends Application {
     @Override
     public void onCreate() {

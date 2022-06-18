@@ -90,26 +90,30 @@ public class FeedFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light),
                 getResources().getColor(android.R.color.holo_red_light));
+
+
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.i(TAG, "fetching new data!");
-                _page = 1;
-                posts = new ArrayList<>();
-                queryPosts();
+                _page = 1; // reset to first page
+                posts = new ArrayList<>(); // clear display data
+                queryPosts(); // fetch fresh data
             }
         });
-        posts = new ArrayList<>();
-        recyclerView = root.findViewById(R.id.feeds);
-        adapter = new PostAdapter(posts, getActivity(), false);
+        posts = new ArrayList<>(); // initialize the list to empty
+        recyclerView = root.findViewById(R.id.feeds); // initialize the recyclerview control
+        adapter = new PostAdapter(posts, getActivity(), false); // initialize the adapter
 
         // below line is for setting linear layout manager to our recycler view.
         linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         // below line is to set layout manager to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter); // set the adapter to the recyclerview
+        // set a listener for endofscroll activity
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            // upon end of scroll, it should refresh the data
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.i(TAG, "onLoadMore" + page);
@@ -117,15 +121,16 @@ public class FeedFragment extends Fragment {
                 queryPosts();
             }
         };
-        recyclerView.addOnScrollListener(scrollListener);
-        recyclerView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        queryPosts();
+        recyclerView.addOnScrollListener(scrollListener); // bind the onscrolllistener to the recyclerview
+        recyclerView.setVisibility(View.GONE); // hide the recyclerview
+        progressBar.setVisibility(View.VISIBLE); // show the progressbar
+        queryPosts(); // make call to fetch data
         return root;
     }
+    // method to query the data
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.setLimit(_page * 20);
+        query.setLimit(_page * 20); // create the query and limit only first 20 elements depending on the page
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {

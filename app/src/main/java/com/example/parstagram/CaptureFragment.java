@@ -89,10 +89,11 @@ public class CaptureFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
 
-        etDescription = root.findViewById(R.id.description);
-        ivPostImage = root.findViewById(R.id.camera_image);
-        btnCaptureImage = root.findViewById(R.id.take_picture);
-        progressBar = root.findViewById(R.id.loading);
+        etDescription = root.findViewById(R.id.description); // initialize the post description control
+        ivPostImage = root.findViewById(R.id.camera_image); // initialize the imageview control
+        btnCaptureImage = root.findViewById(R.id.take_picture); // intialize the capture image button
+        progressBar = root.findViewById(R.id.loading); // initialize the progress bar control
+        // set listener to the capture image button (click)
         btnCaptureImage.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -101,8 +102,9 @@ public class CaptureFragment extends Fragment {
                     }
                 }
         );
+        // initialize the submit button control
         btnSubmit = root.findViewById(R.id.submit);
-        //queryPosts();
+        // set onclicklistener to the submit button control
         btnSubmit.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -162,22 +164,29 @@ public class CaptureFragment extends Fragment {
             getActivity().startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
-
+    // method to submit a post to the API
     private void savePost(String description, ParseUser currentUser, File photoFile) {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE); // display the progress bar
+        // initialize a new post object and set it's associated parameters
         Post post = new Post();
         post.setDescription(description);
         post.setImage(new ParseFile(photoFile));
         post.setUser(currentUser);
+        // run process in the background
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                // hide the progress bar upon completion
                 progressBar.setVisibility(View.GONE);
+                // check for error during execution of the same
                 if (e != null) {
+                    // alert the user if there was one
                     Log.e(TAG, "Error while saving", e);
                     Toast.makeText(getActivity(), "Error while saving", Toast.LENGTH_LONG).show();
+                    // stop execution
                     return;
                 }
+                // otherwise alert the user of the success and clear the form
                 Log.i(TAG, "Post was successfully saved");
                 etDescription.getText().clear();
                 ivPostImage.setImageResource(0);

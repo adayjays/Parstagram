@@ -1,6 +1,5 @@
 package com.example.parstagram;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // setup the main layout
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -35,15 +35,18 @@ public class MainActivity extends AppCompatActivity {
         // in this case it is algorithm fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
     }
-
+    // public method to be called by child fragments
     public void setPhotoFile(File photoFile) {
         this.photoFile = photoFile;
     }
 
+    // method to report the result of the image capture activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // if the request code is the one for capture image via camera
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            // if the result is ok
             if (resultCode == RESULT_OK) {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -55,52 +58,55 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    @Override
+    @Override // method to create menu items (top bar)
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-    @Override
+    @Override // method to listen to menu item clicks
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // if logout button is tapped
         if (id == R.id.action_logout) {
-            ParseUser.logOut();
-            this.finish();
-        } else if (id == R.id.action_compose) {
-            captureFragment = new CaptureFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, captureFragment).commit();
+            ParseUser.logOut(); // log the person out from the api
+            this.finish(); // exit the application
+        } else if (id == R.id.action_compose) { // if compose button is tapped
+            captureFragment = new CaptureFragment(); // initialize capture fragement
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, captureFragment).commit(); // display the fragment
         }
 
         return super.onOptionsItemSelected(item);
     }
+    // method to listen to bottom navigation click actions
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
         // By using switch we can easily get
         // the selected fragment
         // by using there id.
         Fragment selectedFragment = null;
+        // get the tapped menu item by id
         switch (item.getItemId()) {
-            case R.id.algorithm:
-                selectedFragment = new FeedFragment();
+            case R.id.feeds: // if it's the feeds menu item
+                selectedFragment = new FeedFragment(); // select the feeds fragment for display
                 break;
-            case R.id.course:
-                selectedFragment = new CaptureFragment();
-                captureFragment = (CaptureFragment) selectedFragment;
+            case R.id.capture: // if it's the capture menu item
+                selectedFragment = new CaptureFragment(); // select the capture fragment for display
+                captureFragment = (CaptureFragment) selectedFragment; // keep this for later use whenever we return from capture activity (camera)
                 break;
-            case R.id.profile:
-                selectedFragment = new ProfileFragment();
+            case R.id.profile: // if it's the profile menu item
+                selectedFragment = new ProfileFragment(); // select the profile fragment for display
                 break;
         }
+        // if we have the selected fragment
         if (selectedFragment != null)
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, selectedFragment)
-                    .commit();
+                    .commit(); // display it
         return true;
     };
 }
