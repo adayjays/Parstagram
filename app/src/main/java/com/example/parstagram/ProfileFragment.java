@@ -119,8 +119,6 @@ public class ProfileFragment extends Fragment {
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
-        //recyclerView.setVisibility(View.GONE);
-        //progressBar.setVisibility(View.VISIBLE);
         queryPosts();
         return root;
     }
@@ -131,10 +129,6 @@ public class ProfileFragment extends Fragment {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
-                //progressBar.setVisibility(View.GONE);
-                //if (isInitialLoad)
-                 //   recyclerView.setVisibility(View.VISIBLE);
-                //isInitialLoad = false;
                 if (e != null) {
                     Log.e(TAG, "Issue getting posts");
                     Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();

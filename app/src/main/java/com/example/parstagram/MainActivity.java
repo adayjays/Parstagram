@@ -20,7 +20,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     private File photoFile;
-    private CaptureFragment captureFragment;
+    private ComposeFragment composeFragment;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +30,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        // as soon as the application opens the first
-        // fragment should be shown to the user
-        // in this case it is algorithm fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PostsFragment()).commit();
     }
     // public method to be called by child fragments
     public void setPhotoFile(File photoFile) {
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
-                captureFragment.setImage(takenImage);
+                composeFragment.setImage(takenImage);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -76,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
             ParseUser.logOut(); // log the person out from the api
             this.finish(); // exit the application
         } else if (id == R.id.action_compose) { // if compose button is tapped
-            captureFragment = new CaptureFragment(); // initialize capture fragement
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, captureFragment).commit(); // display the fragment
+            composeFragment = new ComposeFragment(); // initialize capture fragement
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, composeFragment).commit(); // display the fragment
         }
 
         return super.onOptionsItemSelected(item);
@@ -91,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
         // get the tapped menu item by id
         switch (item.getItemId()) {
             case R.id.feeds: // if it's the feeds menu item
-                selectedFragment = new FeedFragment(); // select the feeds fragment for display
+                selectedFragment = new PostsFragment(); // select the feeds fragment for display
                 break;
             case R.id.capture: // if it's the capture menu item
-                selectedFragment = new CaptureFragment(); // select the capture fragment for display
-                captureFragment = (CaptureFragment) selectedFragment; // keep this for later use whenever we return from capture activity (camera)
+                selectedFragment = new ComposeFragment(); // select the capture fragment for display
+                composeFragment = (ComposeFragment) selectedFragment; // keep this for later use whenever we return from capture activity (camera)
                 break;
             case R.id.profile: // if it's the profile menu item
                 selectedFragment = new ProfileFragment(); // select the profile fragment for display

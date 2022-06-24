@@ -37,6 +37,7 @@ public class GridPostAdapter extends RecyclerView.Adapter<GridPostAdapter.ViewHo
         this.posts.addAll(posts);
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public GridPostAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,10 +51,6 @@ public class GridPostAdapter extends RecyclerView.Adapter<GridPostAdapter.ViewHo
         Post post = posts.get(position);
         try {
             holder.username.setText(post.getUser().fetchIfNeeded().getUsername());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
             Picasso.get().load(post.getImage().getFile()).into(holder.postImage);
         } catch (ParseException e) {
             e.printStackTrace();

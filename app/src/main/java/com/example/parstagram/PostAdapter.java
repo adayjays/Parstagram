@@ -42,10 +42,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public PostAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflating our layout for item of recycler view item.
         View view;
-        if (useGridView)
+        if (useGridView) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_view_feed_item, parent, false);
-        else
+        } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_item, parent, false);
+        }
         return new PostAdapter.ViewHolder(view);
     }
 
@@ -54,10 +55,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         Post post = posts.get(position);
         try {
             holder.username.setText(post.getUser().fetchIfNeeded().getUsername());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
             Picasso.get().load(post.getImage().getFile()).into(holder.postImage);
         } catch (ParseException e) {
             e.printStackTrace();

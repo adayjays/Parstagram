@@ -23,31 +23,43 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FeedFragment#newInstance} factory method to
+ * Use the {@link PostsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeedFragment extends Fragment {
+public class PostsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
+
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
-    private static final String TAG = "MainActivity";
-    SwipeRefreshLayout swipeContainer;
-    EndlessRecyclerViewScrollListener scrollListener;
-    LinearLayoutManager linearLayoutManager;
-    public static final int REQUEST_CODE = 20;
-    List<Post> posts = new ArrayList<>();
-    PostAdapter adapter;
-    int _page = 1;
 
-    public FeedFragment() {
+    private String mParam2;
+
+    private RecyclerView recyclerView;
+
+    private ProgressBar progressBar;
+
+    private static final String TAG = "MainActivity";
+
+    SwipeRefreshLayout swipeContainer;
+
+    EndlessRecyclerViewScrollListener scrollListener;
+
+    LinearLayoutManager linearLayoutManager;
+
+    public static final int REQUEST_CODE = 20;
+
+    List<Post> posts = new ArrayList<>();
+
+    PostAdapter adapter;
+
+    private int page = 1;
+
+    private boolean isInitialLoad = true;
+
+    public PostsFragment() {
         // Required empty public constructor
     }
 
@@ -57,11 +69,10 @@ public class FeedFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedFragment.
+     * @return A new instance of fragment PostsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FeedFragment newInstance(String param1, String param2) {
-        FeedFragment fragment = new FeedFragment();
+    public static PostsFragment newInstance(String param1, String param2) {
+        PostsFragment fragment = new PostsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,7 +88,7 @@ public class FeedFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    private boolean isInitialLoad = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,7 +107,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.i(TAG, "fetching new data!");
-                _page = 1; // reset to first page
+                page = 1; // reset to first page
                 posts = new ArrayList<>(); // clear display data
                 queryPosts(); // fetch fresh data
             }
@@ -117,7 +128,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.i(TAG, "onLoadMore" + page);
-                _page ++;
+                PostsFragment.this.page++;
                 queryPosts();
             }
         };
@@ -127,23 +138,24 @@ public class FeedFragment extends Fragment {
         queryPosts(); // make call to fetch data
         return root;
     }
+
     // method to query the data
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.setLimit(_page * 20); // create the query and limit only first 20 elements depending on the page
+        query.setLimit(page * 20); // create the query and limit only first 20 elements depending on the page
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 progressBar.setVisibility(View.GONE);
-                if (isInitialLoad)
+                if (isInitialLoad) {
                     recyclerView.setVisibility(View.VISIBLE);
+                }
                 isInitialLoad = false;
                 if (e != null) {
                     Log.e(TAG, "Issue getting posts");
                     Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
                     return;
                 }
-
 
                 // below line is to set adapter
                 // to our recycler view.
